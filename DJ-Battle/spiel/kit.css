@@ -1,0 +1,79 @@
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#05050a;color:#f2eef8;font-family:"Segoe UI",system-ui,Arial,sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.hidden{display:none!important}
+kbd{display:inline-block;padding:1px 6px;border-radius:4px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font:600 12px Consolas,monospace;color:#fff}
+.btn{display:block;width:100%;padding:13px 16px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff2fb0,#b81cff);color:#fff;font:800 17px "Segoe UI",sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 6px 24px rgba(255,47,176,.35)}
+.btn:hover{filter:brightness(1.12)}.btn:disabled{opacity:.45;cursor:default}
+.btn.ghost{background:rgba(255,255,255,.08);box-shadow:none;border:1px solid rgba(255,255,255,.18);font-weight:700}
+/* Menü */
+#menu{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 20%,rgba(255,47,176,.25),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(32,224,255,.18),transparent 60%),rgba(5,5,10,.9);overflow:auto}
+#menu .box{width:min(560px,100%);max-height:100%;overflow:auto;background:rgba(14,12,22,.92);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px 22px 18px;box-shadow:0 20px 80px rgba(0,0,0,.6)}
+#menu .logo{text-align:center}#menu .logo img{width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(255,47,176,.6))}
+#menu .tag{text-align:center;color:#20e0ff;font:700 12px "Segoe UI";letter-spacing:.3em;margin-top:6px}
+#menu h1{text-align:center;font:400 40px Impact,"Arial Black",sans-serif;letter-spacing:.04em;margin:4px 0 8px;background:linear-gradient(90deg,#ff7fd8,#ffd23f);-webkit-background-clip:text;background-clip:text;color:transparent}
+#menu .story{color:#c9c2d8;font-size:14px;line-height:1.45;margin-bottom:12px}
+#menu label{display:block;font-size:13px;color:#b8b0c8;margin:8px 0}
+#menu input,#menu select{display:block;width:100%;margin-top:4px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.4);color:#fff;font:600 16px "Segoe UI"}
+#menu .sep{text-align:center;color:#7d7590;font:700 11px "Segoe UI";letter-spacing:.25em;margin:14px 0 4px}
+#menu .row{display:flex;gap:10px;align-items:flex-end}#menu .row label{flex:1;margin:0}#menu .row .btn{width:auto;white-space:nowrap}
+#menuBtns>.btn{margin-top:10px}
+#loadInfo{text-align:center;color:#ffd23f;font-size:14px;margin:10px 0 2px;min-height:18px}
+#joinInfo{color:#ff9a9a;font-size:13px;min-height:16px;margin-top:4px}
+#menu .help{color:#8e869f;font-size:12px;line-height:1.6;margin-top:12px}
+#bPortal{margin-top:10px}
+/* HUD */
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10}
+#room{position:fixed;left:12px;top:12px;background:rgba(10,8,16,.7);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font-size:13px;min-width:150px;backdrop-filter:blur(6px)}
+#room .code{font:800 22px Consolas,monospace;color:#ff4fc0;letter-spacing:.12em}
+#room .pl{display:flex;align-items:center;gap:6px;margin-top:3px}#room .pl i{width:8px;height:8px;border-radius:50%;background:#20e0ff;display:inline-block}#room .pl.mic i{background:#39ff88;box-shadow:0 0 8px #39ff88}
+#top{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;background:rgba(10,8,16,.7);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:7px 16px;font:700 16px "Segoe UI";white-space:nowrap}
+#top b{color:#ffd23f;font:800 20px Consolas,monospace}
+#score{position:fixed;right:12px;top:64px;background:rgba(10,8,16,.7);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font-size:14px;min-width:170px}
+#score:empty{display:none}
+#score .r{display:flex;justify-content:space-between;gap:14px;padding:2px 0}#score .r.me{color:#ffd23f;font-weight:800}
+#score .h{color:#7fe9ff;font:800 11px "Segoe UI";letter-spacing:.2em;margin-bottom:4px}
+#feed{position:fixed;left:12px;bottom:90px;display:flex;flex-direction:column;gap:4px;max-width:60vw}
+#feed div{background:rgba(10,8,16,.75);border-left:3px solid #ff2fb0;padding:5px 10px;border-radius:6px;font-size:14px;animation:fin .25s}
+@keyframes fin{from{opacity:0;transform:translateX(-10px)}}
+#big{position:fixed;top:34%;left:0;right:0;text-align:center;font:400 54px Impact,"Arial Black",sans-serif;letter-spacing:.04em;color:#fff;text-shadow:0 0 24px rgba(255,47,176,.9),0 4px 0 #000;opacity:0;transition:opacity .25s;padding:0 12px}
+#big.on{opacity:1}#big small{display:block;font:700 20px "Segoe UI";text-shadow:0 2px 6px #000;color:#ffd23f;margin-top:6px}
+#hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(10,8,16,.75);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 14px;font-size:14px;text-align:center;max-width:92vw}
+#hint:empty{display:none}
+#meter{position:fixed;left:50%;top:58%;transform:translateX(-50%);width:240px;height:14px;border-radius:7px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.3);overflow:hidden}
+#meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#20e0ff,#ff2fb0)}
+#cross{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(255,255,255,.8);box-shadow:0 0 4px #000}
+/* Lautstärke */
+#volW{position:fixed;right:12px;top:12px;z-index:60}
+#volBtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,8,16,.75);font-size:20px;cursor:pointer;color:#fff}
+#volBtn.off{background:#d81c5a}
+#volPop{position:absolute;right:0;top:52px;width:250px;background:rgba(14,12,22,.96);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px}
+#volPop label{display:block;font-size:13px;margin-bottom:8px}#volPop input{width:100%}
+#volPop .vrow{display:flex;gap:6px}#volPop .vrow button{flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:12px;cursor:pointer}
+#volPop small{display:block;color:#8e869f;font-size:11px;margin-top:8px;line-height:1.5}
+/* Overlays */
+.overlay{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,5,10,.72);padding:16px}
+.overlay .panel{width:min(460px,100%);max-height:100%;overflow:auto;background:rgba(14,12,22,.95);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:22px;text-align:center}
+.overlay h2{font:400 38px Impact,"Arial Black",sans-serif;letter-spacing:.05em;color:#ff7fd8;margin-bottom:10px}
+.overlay .btn{margin-top:10px}.overlay p{color:#d8d0e6;line-height:1.5}
+.overlay .help{font-size:12px;color:#8e869f;margin-top:12px;line-height:1.7;text-align:left}
+#overP .r{display:flex;justify-content:space-between;padding:4px 8px;border-radius:8px}#overP .r:nth-child(1){background:rgba(255,210,63,.18);color:#ffd23f;font-weight:800}
+/* Touch */
+#touch{position:fixed;inset:0;z-index:20;pointer-events:none}
+#tLook{position:absolute;right:0;top:0;width:60%;height:100%;pointer-events:auto}
+#tJoy{position:absolute;left:26px;bottom:26px;width:140px;height:140px;pointer-events:auto}
+#tJoyBase{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25)}
+#tKnob{position:absolute;left:45px;top:45px;width:50px;height:50px;border-radius:50%;background:rgba(255,47,176,.6);border:2px solid rgba(255,255,255,.6)}
+#tBtns{position:absolute;right:18px;bottom:18px;display:flex;flex-wrap:wrap-reverse;flex-direction:row-reverse;gap:10px;width:260px;pointer-events:none}
+#tBtns .tb{pointer-events:auto;width:74px;height:74px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(20,16,30,.6);color:#fff;font:800 13px "Segoe UI"}
+#tBtns .tb.big{width:96px;height:96px;background:rgba(255,47,176,.45);font-size:15px}
+#tBtns .tb.on{background:rgba(255,210,63,.6)}#tBtns .tb.mic{background:#39b86a}
+#tPause{position:absolute;left:50%;top:10px;transform:translateX(-50%);pointer-events:auto;width:44px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(10,8,16,.7);color:#fff;font-size:16px}
+#tLanes{position:absolute;left:0;right:0;bottom:0;height:34%;display:flex;pointer-events:auto}
+#tLanes button{flex:1;border:0;border-top:3px solid rgba(255,255,255,.25);background:rgba(255,255,255,.04);color:#fff;font:800 18px "Segoe UI"}
+#tLanes button.on{background:rgba(255,255,255,.25)}
+@media (max-width:640px),(max-height:480px){#menu h1{font-size:30px}#menu .story{font-size:13px}#big{font-size:38px}#score{top:60px;font-size:12px;min-width:130px}#room{font-size:11px}#room .code{font-size:18px}}
+body.touch #tPause{left:auto;right:66px;top:12px;transform:none;width:44px;height:44px;border-radius:50%}
+body.touch #feed{bottom:auto;top:110px;max-width:50vw}
+body.touch #feed div{font-size:12px}
+body.touch kbd{display:none}

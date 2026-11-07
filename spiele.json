@@ -1,5 +1,38 @@
 [
  {
+  "name": "DJ-Battle",
+  "portal": 2,
+  "datum": "07.11.2026",
+  "start": "spiel/",
+  "genre": "Rhythmus-Battle",
+  "spieler": "1–6 · Online",
+  "beschreibung": "Spiel den Track im Takt an den SPK-Decks – wer die meisten Punkte holt, gewinnt die Crowd.",
+  "ordner": "DJ-Battle",
+  "pfad": "/DJ-Battle/"
+ },
+ {
+  "name": "Plakatieren bei Nacht",
+  "portal": 5,
+  "datum": "07.11.2026",
+  "start": "spiel/",
+  "genre": "Schleichen",
+  "spieler": "1–6 · Koop · Online",
+  "beschreibung": "Kleb nachts SPK-Plakate in der Stadt, ohne von Streife und Kameras erwischt zu werden.",
+  "ordner": "Plakatieren bei Nacht",
+  "pfad": "/Plakatieren%20bei%20Nacht/"
+ },
+ {
+  "name": "Razzia",
+  "portal": 3,
+  "datum": "07.11.2026",
+  "start": "spiel/",
+  "genre": "Verstecken",
+  "spieler": "1–8 · Online",
+  "beschreibung": "Die Polizei sucht die Raver im Wald. Wer gefunden wird, wird selbst zum Polizisten.",
+  "ordner": "Razzia",
+  "pfad": "/Razzia/"
+ },
+ {
   "name": "SPK – Fuck the Police",
   "portal": 1,
   "datum": "04.11.2026",
@@ -9,5 +42,16 @@
   "beschreibung": "4 Kapitel: SPK-LKW gemeinsam beladen, nachts zur Party fahren (Gegenverkehr, 2 Leben), Boxen ausladen und ums DJ-Pult aufstellen, dann als DJ die illegale Waldrave gegen die Polizei verteidigen. Koop mit Freunden – auch am Handy.",
   "ordner": "SPK - Fuck the Police",
   "pfad": "/SPK%20-%20Fuck%20the%20Police/"
+ },
+ {
+  "name": "Tour-Bus-Rennen",
+  "portal": 4,
+  "datum": "07.11.2026",
+  "start": "spiel/",
+  "genre": "Rennen",
+  "spieler": "1–6 · Online",
+  "beschreibung": "Mit den Tour-Bussen durch den Wald zur Party – Boxen einsammeln, Polizeisperren ausweichen.",
+  "ordner": "Tour-Bus-Rennen",
+  "pfad": "/Tour-Bus-Rennen/"
  }
 ]
