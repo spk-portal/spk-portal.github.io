@@ -188,3 +188,11 @@ body.touch #room { transform: scale(0.6); transform-origin: top left; }
 #volPop .vrow button.on { background: #e0245e; }
 #volPop small { opacity: 0.65; font-size: 11px; }
 body.touch #volPop small { display: none; }
+
+.hsBox{margin:10px 0 4px;background:rgba(0,0,0,.35);border:1px solid rgba(255,210,63,.3);border-radius:12px;padding:8px 10px;text-align:left}
+.hsH{color:#ffd23f;font:800 12px "Segoe UI";letter-spacing:.12em;margin-bottom:4px}
+.hsR{display:flex;gap:8px;padding:2px 4px;font-size:14px;border-radius:6px}.hsR span:first-child{width:28px}.hsR .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hsR b{color:#7fe9ff;font-family:Consolas,monospace}
+.hsR.me{background:rgba(255,210,63,.22);color:#ffd23f}
+.hsE{color:#b8b0c8;font-size:13px;padding:2px 4px}.hsI{color:#7d7590;font-size:11px;margin-top:4px}
+.hsNew{color:#39ff88;font:800 16px "Segoe UI";margin:2px 0 6px;text-align:center}
+#overP .hsBox .hsR:nth-child(1){background:none;color:inherit;font-weight:400}
