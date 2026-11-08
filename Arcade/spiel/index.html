@@ -1,0 +1,13 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>SPK Arcade</title><link rel="icon" href="/SPK%20-%20Fuck%20the%20Police/spiel/assets/spk_logo.png">
+<style>
+@font-face{font-family:"PS2P";src:url(ps2p.woff2) format("woff2");font-display:block}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#1a0a2a 0%,#000 75%)}
+#box{position:relative;aspect-ratio:4/3;width:min(100vw,133.33vh);border-radius:18px;overflow:hidden;box-shadow:0 0 0 6px #111,0 0 0 10px #2a2438,0 0 60px rgba(255,47,176,.35)}
+#scr{width:100%;height:100%;display:block;image-rendering:pixelated;filter:saturate(1.15) contrast(1.05)}
+#box:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.55) 100%);mix-blend-mode:multiply}
+#box:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 40%);animation:fl 0.12s infinite}
+@keyframes fl{50%{opacity:.85}}
+</style></head><body><div id="wrap"><div id="box"><canvas id="scr"></canvas></div></div>
+<script type="module" src="arcade.js?v=1794172964"></script></body></html>
