@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Operation Bunker – 5 gegen 5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0d0e; overflow: hidden; font-family: "Segoe UI", system-ui, sans-serif; color: #e9ece8; user-select: none; }
+  canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .hide { display: none !important; }
+  #hud { position: fixed; inset: 0; pointer-events: none; }
+  #crosshair { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px; border: 2px solid rgba(255,255,255,.75); border-radius: 50%; box-shadow: 0 0 3px #000; }
+  #crosshair::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; background: #fff; border-radius: 50%; }
+  #hitmarker { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px; opacity: 0; transition: opacity .25s; background:
+    linear-gradient(45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%), linear-gradient(-45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%); }
+  #hitmarker.kill { filter: drop-shadow(0 0 3px #f33) hue-rotate(0deg); background:
+    linear-gradient(45deg, transparent 44%, #ff4a3d 44%, #ff4a3d 56%, transparent 56%), linear-gradient(-45deg, transparent 44%, #ff4a3d 44%, #ff4a3d 56%, transparent 56%); }
+  #vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 45%, rgba(190,0,0,.75) 100%); opacity: 0; }
+  #topbar { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0; font-weight: 700; text-shadow: 0 1px 3px #000; }
+  #topbar .team { display: flex; align-items: center; gap: 10px; padding: 6px 16px; background: rgba(10,14,16,.6); backdrop-filter: blur(4px); }
+  #topbar .t0 { border-radius: 8px 0 0 8px; border-bottom: 3px solid #4da3ff; }
+  #topbar .t1 { border-radius: 0 8px 8px 0; border-bottom: 3px solid #ff5a4d; flex-direction: row-reverse; }
+  #topbar .sc { font-size: 26px; min-width: 26px; text-align: center; }
+  #topbar .al { font-size: 13px; opacity: .85; font-weight: 600; }
+  #timer { padding: 6px 18px; font-size: 22px; background: rgba(10,14,16,.75); border-bottom: 3px solid #cfd4cf; font-variant-numeric: tabular-nums; }
+  #code { position: absolute; top: 14px; left: 16px; padding: 7px 12px; background: rgba(10,14,16,.6); border-radius: 8px; font-size: 14px; pointer-events: auto; cursor: pointer; }
+  #code b { font-size: 18px; letter-spacing: 3px; color: #ffd66b; }
+  #killfeed { position: absolute; top: 14px; right: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 14px; font-weight: 600; }
+  #killfeed div { padding: 4px 10px; background: rgba(10,14,16,.6); border-radius: 6px; }
+  .c0 { color: #6db6ff; } .c1 { color: #ff776b; }
+  #bl { position: absolute; left: 22px; bottom: 20px; display: flex; align-items: flex-end; gap: 10px; text-shadow: 0 2px 4px #000; }
+  #hp { font-size: 46px; font-weight: 800; line-height: 1; }
+  #bl small, #br small { font-size: 13px; opacity: .8; letter-spacing: 1px; }
+  #hpbar { width: 180px; height: 8px; background: rgba(0,0,0,.5); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  #hpfill { height: 100%; width: 100%; background: linear-gradient(90deg, #7be07b, #c8f08a); transition: width .15s; }
+  #br { position: absolute; right: 22px; bottom: 20px; text-align: right; text-shadow: 0 2px 4px #000; }
+  #ammo { font-size: 46px; font-weight: 800; line-height: 1; }
+  #shells { display: flex; gap: 4px; justify-content: flex-end; margin-top: 6px; }
+  #shells i { width: 9px; height: 22px; border-radius: 2px; background: linear-gradient(#d43a2a 70%, #d9b34a 70%); }
+  #shells i.e { background: rgba(255,255,255,.15); }
+  #center { position: absolute; left: 0; right: 0; top: 24%; text-align: center; font-size: 34px; font-weight: 800; text-shadow: 0 2px 8px #000; }
+  #centerSmall { position: absolute; left: 0; right: 0; top: 33%; text-align: center; font-size: 17px; font-weight: 600; text-shadow: 0 2px 6px #000; opacity: .95; }
+  #spec { position: absolute; left: 0; right: 0; bottom: 90px; text-align: center; font-size: 16px; font-weight: 600; text-shadow: 0 2px 6px #000; }
+  #score { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: min(760px, 92vw); background: rgba(10,14,16,.86); border-radius: 12px; padding: 16px 20px; backdrop-filter: blur(6px); }
+  #score h3 { margin: 6px 0; font-size: 15px; letter-spacing: 1px; }
+  #score table { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 10px; }
+  #score td, #score th { padding: 4px 8px; text-align: left; } #score th { opacity: .6; font-weight: 600; font-size: 12px; }
+  #score td.n, #score th.n { text-align: right; width: 70px; }
+  #score tr.dead td { opacity: .45; } #score tr.me td { background: rgba(255,255,255,.08); }
+  .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(8,10,11,.55), rgba(8,10,11,.9)); }
+  .panel { width: min(880px, 94vw); max-height: 94vh; overflow: auto; background: rgba(16,20,22,.88); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 26px 30px; box-shadow: 0 20px 60px rgba(0,0,0,.6); backdrop-filter: blur(8px); }
+  h1 { margin: 0; font-size: 40px; letter-spacing: 3px; } h1 span { color: #ffd66b; }
+  .sub { opacity: .7; margin: 4px 0 18px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  label { display: block; font-size: 13px; opacity: .75; margin: 10px 0 4px; }
+  input[type=text], select { width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: #0e1213; color: #fff; outline: none; }
+  input[type=range] { width: 100%; }
+  #codeIn { text-transform: uppercase; letter-spacing: 4px; font-weight: 700; text-align: center; }
+  button { pointer-events: auto; cursor: pointer; width: 100%; margin-top: 12px; padding: 13px; font-size: 17px; font-weight: 700; border: 0; border-radius: 8px; color: #10130f; background: #ffd66b; }
+  button:hover { filter: brightness(1.1); } button.sec { background: #cfd6d2; }
+  button:disabled { opacity: .5; cursor: default; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .keys { font-size: 14px; line-height: 1.9; } .keys b { display: inline-block; min-width: 92px; padding: 0 6px; margin-right: 8px; text-align: center; background: #262c2e; border-radius: 5px; border-bottom: 2px solid #111; }
+  #menuMsg { min-height: 20px; margin-top: 10px; color: #ffb3a8; font-size: 14px; }
+  #loading { position: fixed; inset: 0; background: #0b0d0e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; font-size: 18px; }
+  #loadbar { width: 320px; height: 6px; background: #222; border-radius: 3px; overflow: hidden; } #loadfill { height: 100%; width: 0; background: #ffd66b; transition: width .2s; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud" class="hide">
+  <div id="vignette"></div>
+  <div id="crosshair"></div><div id="hitmarker"></div>
+  <div id="code" title="Klicken zum Kopieren">Code für Freunde: <b id="codeTxt">–</b></div>
+  <div id="topbar">
+    <div class="team t0"><span class="c0">BLAU</span><span class="al" id="al0">5 leben</span><span class="sc" id="sc0">0</span></div>
+    <div id="timer">0:00</div>
+    <div class="team t1"><span class="c1">ROT</span><span class="al" id="al1">5 leben</span><span class="sc" id="sc1">0</span></div>
+  </div>
+  <div id="killfeed"></div><div id="fps" style="position:absolute;right:16px;bottom:118px;font-size:12px;opacity:.55;text-shadow:0 1px 2px #000"></div>
+  <div id="center"></div><div id="centerSmall"></div><div id="spec"></div><div id="prompt" style="position:absolute;left:0;right:0;bottom:150px;text-align:center;font-size:17px;font-weight:700;color:#ffd66b;text-shadow:0 2px 6px #000"></div>
+  <div id="bl"><div><div id="hpbar"><div id="hpfill"></div></div><small>LEBEN</small></div><div id="hp">100</div></div>
+  <div id="br"><div id="ammo">6</div><small>SCHROTFLINTE · R = NACHLADEN</small><div id="shells"></div></div>
+  <div id="score" class="hide"></div>
+</div>
+
+<div id="menu" class="overlay hide">
+  <div class="panel">
+    <h1>OPERATION <span>BUNKER</span></h1>
+    <div class="sub">5 gegen 5 · Schrotflinten · Wer zuerst 8 Runden gewinnt, gewinnt das Spiel<br><span style="font-size:13px">Online für Freunde: <b style="color:#ffd66b">spk-portal.github.io/bunker</b> – jeder kann ein Spiel erstellen oder mit Code beitreten</span></div>
+    <div class="grid">
+      <div>
+        <label>Dein Name</label><input type="text" id="name" maxlength="14" placeholder="Spieler">
+        <div class="row2">
+          <div><label>Dein Team</label><select id="team"><option value="0">Blau</option><option value="1">Rot</option></select></div>
+          <div><label>Bot-Stärke</label><select id="diff"><option value="0">Leicht</option><option value="1" selected>Mittel</option><option value="2">Schwer</option></select></div>
+        </div>
+        <button id="hostBtn">Spiel erstellen</button>
+        <label style="margin-top:18px">Code von einem Freund</label>
+        <input type="text" id="codeIn" maxlength="5" placeholder="CODE">
+        <button id="joinBtn" class="sec">Mit Code beitreten</button>
+        <div id="menuMsg"></div>
+      </div>
+      <div>
+        <div class="row2">
+          <div><label>Grafik</label><select id="quality"><option value="2">Hoch (mit Schatten)</option><option value="1">Mittel</option><option value="0">Niedrig</option></select></div>
+        </div>
+        <label>Radio-Lautstärke</label><input type="range" id="mvol" min="0" max="1" step="0.05" value="0.7">
+        <label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="autoq" checked> Grafik automatisch anpassen, wenn es ruckelt</label>
+        <div>
+          <div><label>Maus-Empfindlichkeit</label><input type="range" id="sens" min="0.3" max="3" step="0.1" value="1"></div>
+        </div>
+        <label>Steuerung</label>
+        <div class="keys">
+          <div><b>W A S D</b>Laufen</div>
+          <div><b>Maus</b>Umsehen</div>
+          <div><b>Linksklick</b>Schießen</div>
+          <div><b>Rechtsklick</b>Zielen (Zoom)</div>
+          <div><b>R</b>Nachladen</div>
+          <div><b>Leertaste</b>Springen</div>
+          <div><b>C</b>Ducken</div>
+          <div><b>Shift</b>Leise gehen</div>
+          <div><b>Tab</b>Punktetabelle</div>
+          <div><b>F11</b>Vollbild</div>
+          <div><b>E</b>Radio umschalten (beim Start)</div>
+          <div><b>Esc</b>Pause / Maus frei</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pause" class="overlay hide">
+  <div class="panel" style="width:min(420px,92vw);text-align:center">
+    <h1 style="font-size:30px">PAUSE</h1>
+    <div class="sub">Das Spiel läuft im Hintergrund weiter.</div>
+    <button id="resume">Weiterspielen</button>
+    <button id="quit" class="sec">Zurück zum Hauptmenü</button>
+  </div>
+</div>
+
+<div id="loading"><div>Operation Bunker wird geladen …</div><div id="loadbar"><div id="loadfill"></div></div><div id="loadtxt" style="font-size:13px;opacity:.6"></div></div>
+
+<script src="lib/peerjs.min.js"></script>
+<script type="module" src="game.js"></script>
+</body>
+</html>
