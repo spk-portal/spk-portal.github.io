@@ -63,6 +63,29 @@
   .keys { font-size: 14px; line-height: 1.9; } .keys b { display: inline-block; min-width: 92px; padding: 0 6px; margin-right: 8px; text-align: center; background: #262c2e; border-radius: 5px; border-bottom: 2px solid #111; }
   #menuMsg { min-height: 20px; margin-top: 10px; color: #ffb3a8; font-size: 14px; }
   #loading { position: fixed; inset: 0; background: #0b0d0e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; font-size: 18px; }
+  #moneybox { position: absolute; left: 22px; bottom: 96px; text-shadow: 0 2px 4px #000; }
+  #money { font-size: 30px; font-weight: 800; color: #8fe08f; }
+  #armor { font-size: 18px; font-weight: 700; color: #9fc8ff; margin-left: 10px; }
+  #moneybox .plus { position: absolute; left: 0; top: -26px; font-weight: 800; color: #b9ffb0; animation: up 1.6s forwards; }
+  @keyframes up { from { transform: translateY(0); opacity: 1 } to { transform: translateY(-34px); opacity: 0 } }
+  #buyhint { position: absolute; left: 22px; bottom: 140px; font-size: 14px; font-weight: 700; color: #ffd66b; text-shadow: 0 2px 4px #000; }
+  #slots { display: flex; gap: 6px; justify-content: flex-end; margin-bottom: 6px; font-size: 12px; font-weight: 700; }
+  #slots span { padding: 3px 8px; border-radius: 5px; background: rgba(10,14,16,.55); opacity: .65; }
+  #slots span.on { opacity: 1; background: rgba(255,214,107,.25); color: #ffd66b; }
+  #scope { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 0, transparent 33vh, #000 33.3vh); }
+  #scope::before, #scope::after { content: ""; position: absolute; background: #000; }
+  #scope::before { left: 0; right: 0; top: 50%; height: 1px; }
+  #scope::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+  .bgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+  .bitem { position: relative; padding: 12px; border-radius: 10px; background: #1c2224; border: 1px solid rgba(255,255,255,.08); cursor: pointer; min-height: 92px; }
+  .bitem:hover { border-color: #ffd66b; background: #232a2c; }
+  .bitem b { position: absolute; top: 8px; right: 10px; font-size: 13px; color: #ffd66b; }
+  .bitem .bn { font-weight: 800; font-size: 15px; padding-right: 18px; }
+  .bitem .bi { font-size: 12px; opacity: .65; margin: 6px 0; min-height: 30px; }
+  .bitem .bp { font-weight: 800; color: #8fe08f; }
+  .bitem.poor { opacity: .4; } .bitem.poor .bp { color: #ff8a7a; }
+  .bitem.have { opacity: .55; } .bitem.have .bp { color: #9fc8ff; }
+  #credits { font-size: 11px; opacity: .55; margin-top: 12px; line-height: 1.5; } #credits a { color: inherit; }
   #loadbar { width: 320px; height: 6px; background: #222; border-radius: 3px; overflow: hidden; } #loadfill { height: 100%; width: 0; background: #ffd66b; transition: width .2s; }
 </style>
 </head>
@@ -80,15 +103,18 @@
   </div>
   <div id="killfeed"></div><div id="fps" style="position:absolute;right:16px;bottom:118px;font-size:12px;opacity:.55;text-shadow:0 1px 2px #000"></div>
   <div id="center"></div><div id="centerSmall"></div><div id="spec"></div><div id="prompt" style="position:absolute;left:0;right:0;bottom:150px;text-align:center;font-size:17px;font-weight:700;color:#ffd66b;text-shadow:0 2px 6px #000"></div>
+  <div id="scope" class="hide"></div>
+  <div id="buyhint"></div>
+  <div id="moneybox"><span id="money">$ 800</span><span id="armor"></span></div>
   <div id="bl"><div><div id="hpbar"><div id="hpfill"></div></div><small>LEBEN</small></div><div id="hp">100</div></div>
-  <div id="br"><div id="ammo">6</div><small>SCHROTFLINTE · R = NACHLADEN</small><div id="shells"></div></div>
+  <div id="br"><div id="slots"></div><div id="ammo">13</div><small id="wname">PISTOLE</small><div id="shells"></div></div>
   <div id="score" class="hide"></div>
 </div>
 
 <div id="menu" class="overlay hide">
   <div class="panel">
     <h1>OPERATION <span>BUNKER</span></h1>
-    <div class="sub">5 gegen 5 · Schrotflinten · Wer zuerst 8 Runden gewinnt, gewinnt das Spiel<br><span style="font-size:13px">Online für Freunde: <b style="color:#ffd66b">spk-portal.github.io/bunker</b> – jeder kann ein Spiel erstellen oder mit Code beitreten</span></div>
+    <div class="sub">5 gegen 5 · Geld verdienen und Waffen kaufen wie in Counter-Strike · Wer zuerst 8 Runden gewinnt, gewinnt<br><span style="font-size:13px">Online für Freunde: <b style="color:#ffd66b">spk-portal.github.io/bunker</b> – jeder kann ein Spiel erstellen oder mit Code beitreten</span></div>
     <div class="grid">
       <div>
         <label>Dein Name</label><input type="text" id="name" maxlength="14" placeholder="Spieler">
@@ -115,8 +141,11 @@
         <div class="keys">
           <div><b>W A S D</b>Laufen</div>
           <div><b>Maus</b>Umsehen</div>
-          <div><b>Linksklick</b>Schießen</div>
-          <div><b>Rechtsklick</b>Zielen (Zoom)</div>
+          <div><b>Linksklick</b>Schießen / Granate werfen</div>
+          <div><b>Rechtsklick</b>Zielen · Zielfernrohr</div>
+          <div><b>B</b>Kaufmenü (Startbereich, erste 20 s)</div>
+          <div><b>1 2 4 / Rad</b>Hauptwaffe · Pistole · Granate</div>
+          <div><b>Q</b>Letzte Waffe</div>
           <div><b>R</b>Nachladen</div>
           <div><b>Leertaste</b>Springen</div>
           <div><b>C</b>Ducken</div>
@@ -128,6 +157,15 @@
         </div>
       </div>
     </div>
+    <div id="credits"><b>Mitwirkende &amp; Lizenzen:</b> AK-47 von wburton · M4-Sturmgewehr („Assault rifel“) von Artem Goyko · FAMAS Nebula von burakgndz · Splittergranate M26 von MakarovGreenBird (alle CC BY 4.0) · Steyr AUG A1 von Pieter Ferreira (CC BY-SA 4.0) · VSS von Arms Museum und Pistole P35 von Virtual Museums of Małopolska (CC0) – alle über Sketchfab · Figuren und Animationen: Mixamo · Texturen und Gegenstände: Poly Haven · Tekkno: SPK Soundsystem</div>
+  </div>
+</div>
+
+<div id="buy" class="overlay hide">
+  <div class="panel" style="width:min(940px,95vw)">
+    <h1 style="font-size:28px">KAUFMENÜ <span id="buyMoney"></span></h1>
+    <div class="sub">Zahl drücken oder anklicken = kaufen · B = schließen · Kaufzeit noch <b id="buyTime"></b> · Die Pistole hast du immer</div>
+    <div id="buyGrid" class="bgrid"></div>
   </div>
 </div>
 
