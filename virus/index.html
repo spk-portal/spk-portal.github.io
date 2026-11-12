@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Fuck the Virus!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0d0e; overflow: hidden; font-family: "Segoe UI", system-ui, sans-serif; color: #e9ece8; user-select: none; }
+  canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .hide { display: none !important; }
+  #hud { position: fixed; inset: 0; pointer-events: none; text-shadow: 0 1px 3px #000; }
+  #crosshair { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px; border: 2px solid rgba(255,255,255,.7); border-radius: 50%; box-shadow: 0 0 3px #000; }
+  #crosshair::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; background: #fff; border-radius: 50%; }
+  #hitmarker { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px; opacity: 0; background: linear-gradient(45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%), linear-gradient(-45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%); }
+  #hitmarker.kill { background: linear-gradient(45deg, transparent 44%, #ff4a3d 44%, #ff4a3d 56%, transparent 56%), linear-gradient(-45deg, transparent 44%, #ff4a3d 44%, #ff4a3d 56%, transparent 56%); }
+  #vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 45%, rgba(170,0,0,.8) 100%); opacity: 0; }
+  #code { position: absolute; top: 12px; left: 14px; padding: 6px 12px; background: rgba(10,14,16,.6); border-radius: 8px; font-size: 13px; pointer-events: auto; cursor: pointer; }
+  #code b { font-size: 17px; letter-spacing: 3px; color: #b6ff6b; }
+  #fps { position: absolute; top: 14px; right: 16px; font-size: 11px; opacity: .45; }
+  #obj { position: absolute; top: 54px; left: 14px; padding: 10px 14px; background: rgba(10,14,16,.55); border-radius: 10px; font-size: 14px; line-height: 1.65; border-left: 3px solid #b6ff6b; min-width: 250px; }
+  #obj b { font-size: 12px; letter-spacing: 2px; color: #b6ff6b; }
+  #obj small { opacity: .65; } #obj .done { opacity: .45; text-decoration: line-through; } #obj .lock { opacity: .55; }
+  #compass { position: absolute; top: 10px; left: 50%; width: 520px; margin-left: -260px; height: 42px; background: linear-gradient(90deg, transparent, rgba(10,14,16,.55) 15%, rgba(10,14,16,.55) 85%, transparent); border-radius: 8px; overflow: hidden; }
+  #compass::after { content: ""; position: absolute; left: 50%; top: 0; width: 2px; height: 8px; background: #fff; }
+  #compass .cd { position: absolute; top: 12px; transform: translateX(-50%); font-weight: 800; font-size: 15px; opacity: .85; }
+  #compass .cm { position: absolute; top: 2px; transform: translateX(-50%); font-size: 18px; text-align: center; line-height: 1; }
+  #compass .cm small { display: block; font-size: 10px; font-weight: 700; margin-top: 2px; }
+  #compass .boss { color: #ff8a3d; } #compass .lab { color: #ff5050; } #compass .mate { color: #6db6ff; font-size: 13px; top: 6px; }
+  #killfeed { position: absolute; top: 34px; right: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 14px; font-weight: 600; }
+  #killfeed div { padding: 4px 10px; background: rgba(10,14,16,.6); border-radius: 6px; }
+  #bl { position: absolute; left: 22px; bottom: 20px; }
+  #hp { font-size: 44px; font-weight: 800; line-height: 1; }
+  #hpbar { width: 200px; height: 8px; background: rgba(0,0,0,.5); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+  #hpfill { height: 100%; width: 100%; background: linear-gradient(90deg, #7be07b, #c8f08a); transition: width .15s; }
+  #inv { display: flex; gap: 12px; margin-top: 10px; font-size: 15px; font-weight: 700; }
+  #inv span { padding: 4px 9px; background: rgba(10,14,16,.55); border-radius: 6px; }
+  #br { position: absolute; right: 22px; bottom: 20px; text-align: right; }
+  #ammo { font-size: 44px; font-weight: 800; line-height: 1; }
+  #wname { font-size: 13px; letter-spacing: 1px; opacity: .85; margin-top: 4px; }
+  #slots { display: flex; gap: 6px; justify-content: flex-end; margin-bottom: 6px; font-size: 12px; font-weight: 700; }
+  #slots span { padding: 3px 8px; border-radius: 5px; background: rgba(10,14,16,.55); opacity: .65; }
+  #slots span.on { opacity: 1; background: rgba(182,255,107,.22); color: #b6ff6b; }
+  #center { position: absolute; left: 0; right: 0; top: 22%; text-align: center; font-size: 36px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 2px 10px #000; }
+  #centerSmall { position: absolute; left: 10%; right: 10%; top: 30%; text-align: center; font-size: 17px; font-weight: 600; text-shadow: 0 2px 6px #000; }
+  #prompt { position: absolute; left: 0; right: 0; top: 58%; text-align: center; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: #ffe08a; }
+  #prog { position: absolute; left: 50%; top: 62%; width: 220px; margin-left: -110px; height: 8px; background: rgba(0,0,0,.55); border-radius: 4px; overflow: hidden; }
+  #progfill { height: 100%; width: 0; background: #ffe08a; }
+  #picks { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pick { font-weight: 800; font-size: 17px; color: #b6ff6b; animation: up 2.6s forwards; }
+  @keyframes up { 0% { opacity: 0; transform: translateY(8px) } 10% { opacity: 1; transform: none } 75% { opacity: 1 } 100% { opacity: 0; transform: translateY(-20px) } }
+  #buildbar { position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 760px; }
+  #buildbar span { padding: 7px 12px; background: rgba(10,14,16,.7); border-radius: 8px; font-weight: 700; font-size: 14px; border: 1px solid rgba(255,255,255,.1); }
+  #buildbar span b { color: #b6ff6b; margin-right: 4px; } #buildbar span small { display: block; font-size: 11px; opacity: .7; }
+  #buildbar span.on { border-color: #b6ff6b; background: rgba(60,90,30,.7); } #buildbar span.poor { opacity: .45; }
+  #buildbar .bhint { width: 100%; text-align: center; font-size: 12px; opacity: .8; }
+  #bossbar { position: absolute; left: 50%; top: 64px; width: 440px; margin-left: -220px; text-align: center; }
+  #bossname { font-weight: 900; letter-spacing: 2px; color: #ff8a3d; font-size: 15px; }
+  #bossbg { height: 10px; background: rgba(0,0,0,.6); border-radius: 5px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(255,255,255,.15); }
+  #bossfill { height: 100%; width: 100%; background: linear-gradient(90deg, #a1180e, #ff5a2a); }
+  #scope { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 0, transparent 33vh, #000 33.3vh); }
+  #scope::before, #scope::after { content: ""; position: absolute; background: #000; }
+  #scope::before { left: 0; right: 0; top: 50%; height: 1px; } #scope::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+  #map { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.55); pointer-events: none; }
+  #map canvas { border-radius: 10px; box-shadow: 0 10px 50px #000; max-width: 92vw; max-height: 88vh; }
+  .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(8,10,11,.5), rgba(8,10,11,.92)); }
+  .panel { width: min(920px, 94vw); max-height: 94vh; overflow: auto; background: rgba(16,20,22,.9); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 26px 30px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  h1 { margin: 0; font-size: 46px; letter-spacing: 3px; font-weight: 900; } h1 span { color: #b6ff6b; }
+  .sub { opacity: .8; margin: 6px 0 18px; line-height: 1.5; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  label { display: block; font-size: 13px; opacity: .75; margin: 10px 0 4px; }
+  input[type=text], select { width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: #0e1213; color: #fff; outline: none; }
+  input[type=range] { width: 100%; }
+  #codeIn { text-transform: uppercase; letter-spacing: 4px; font-weight: 700; text-align: center; }
+  button { pointer-events: auto; cursor: pointer; width: 100%; margin-top: 12px; padding: 13px; font-size: 17px; font-weight: 800; border: 0; border-radius: 8px; color: #10130f; background: #b6ff6b; }
+  button:hover { filter: brightness(1.1); } button.sec { background: #cfd6d2; } button:disabled { opacity: .5; cursor: default; }
+  .keys { font-size: 13.5px; line-height: 1.85; } .keys b { display: inline-block; min-width: 96px; padding: 0 6px; margin-right: 8px; text-align: center; background: #262c2e; border-radius: 5px; border-bottom: 2px solid #111; }
+  #menuMsg { min-height: 20px; margin-top: 10px; color: #ffb3a8; font-size: 14px; }
+  #loading { position: fixed; inset: 0; background: #0b0d0e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; font-size: 18px; }
+  #loadbar { width: 360px; height: 8px; background: #222; border-radius: 4px; overflow: hidden; } #loadfill { height: 100%; width: 0; background: #b6ff6b; }
+  .story { background: rgba(182,255,107,.06); border-left: 3px solid #b6ff6b; padding: 10px 14px; border-radius: 6px; font-size: 14.5px; line-height: 1.55; margin-bottom: 14px; }
+  .credits { font-size: 11px; opacity: .45; margin-top: 16px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="loading"><div style="font-size:34px;font-weight:900;letter-spacing:2px">FUCK THE <span style="color:#b6ff6b">VIRUS!</span></div><div id="loadbar"><div id="loadfill"></div></div><div id="loadtxt">Lade …</div></div>
+
+<div id="hud" class="hide">
+  <div id="crosshair"></div><div id="hitmarker"></div><div id="vignette"></div>
+  <div id="code">Code: <b id="codeTxt"></b></div><div id="fps"></div>
+  <div id="compass"></div>
+  <div id="bossbar" class="hide"><div id="bossname"></div><div id="bossbg"><div id="bossfill"></div></div></div>
+  <div id="obj"></div>
+  <div id="killfeed"></div>
+  <div id="center"></div><div id="centerSmall"></div>
+  <div id="prompt"></div><div id="prog" class="hide"><div id="progfill"></div></div>
+  <div id="picks"></div>
+  <div id="buildbar" class="hide"></div>
+  <div id="bl"><div id="hp">100</div><div id="hpbar"><div id="hpfill"></div></div><div id="inv"></div></div>
+  <div id="br"><div id="slots"></div><div id="ammo"></div><div id="wname"></div></div>
+</div>
+<div id="scope" class="hide"></div>
+<div id="map" class="hide"><canvas id="mapc" width="1140" height="840"></canvas></div>
+
+<div id="menu" class="overlay hide"><div class="panel">
+  <h1>FUCK THE <span>VIRUS!</span></h1>
+  <div class="sub">Koop-Zombie-Shooter in einer offenen Stadt · 1 bis 4 Spieler</div>
+  <div class="story">Im <b>Biotech-Labor</b> am Stadtrand ist ein Virus ausgebrochen. Fast alle Menschen sind zu Zombies geworden.
+  In vier Stadtteilen haben sich mutierte <b>Endbosse</b> eingenistet. Wenn alle vier fallen, erscheint <b>Patient Null</b> vor dem Labor –
+  er trägt die <b>Schlüsselkarte</b>. Nur damit kommt ihr ins Labor zum <b>Gegenmittel</b> und könnt die Welt retten.</div>
+  <div class="grid">
+    <div>
+      <label>Dein Name</label><input id="name" type="text" maxlength="14" placeholder="Spieler">
+      <button id="hostBtn">Neues Spiel starten (Gastgeber)</button>
+      <label style="margin-top:18px">… oder einem Freund beitreten – Code eingeben:</label>
+      <input id="codeIn" type="text" maxlength="8" placeholder="CODE">
+      <button id="joinBtn" class="sec">Beitreten</button>
+      <div id="menuMsg"></div>
+      <label>Grafik</label><select id="quality"><option value="0">Niedrig (schnell)</option><option value="1">Mittel</option><option value="2">Hoch</option></select>
+      <label>Maus-Empfindlichkeit</label><input id="sens" type="range" min="0.3" max="2.5" step="0.05" value="1">
+    </div>
+    <div class="keys">
+      <div><b>W A S D</b> laufen · <b>Shift</b> sprinten</div>
+      <div><b>Leertaste</b> springen · <b>C</b> ducken</div>
+      <div><b>Linksklick</b> schießen · <b>Rechtsklick</b> zielen</div>
+      <div><b>R</b> nachladen · <b>V</b> Nahkampf-Schlag</div>
+      <div><b>1 / 2 / G</b> Waffe / Pistole / Granate</div>
+      <div><b>E</b> Kiste öffnen, Tür, Gegenmittel</div>
+      <div><b>E halten</b> Baum fällen (Holz), Autowrack (Schrott)</div>
+      <div><b>F</b> Baumodus: Wände, Leitern, Plattformen, Fallen</div>
+      <div><b>H</b> Verbandskasten · <b>M</b> Karte</div>
+      <div style="margin-top:8px;opacity:.75">Tipp: Mit einer Leiter kommt ihr auf Dächer – Zombies können nicht klettern, reißen aber Leitern ein.</div>
+    </div>
+  </div>
+  <div class="credits">Karte: © OpenStreetMap-Mitwirkende · Texturen & Modelle: Poly Haven (CC0), Mixamo, Sketchfab (Autowracks: Renafox, u. a., CC BY / CC BY-NC) · Geräusche: Pixabay</div>
+</div></div>
+
+<div id="pause" class="overlay hide"><div class="panel" style="width:min(420px,90vw);text-align:center">
+  <h2 style="margin:0 0 8px">Pause</h2><div style="opacity:.75">Klick auf „Weiter“, um die Maus wieder zu fangen.</div>
+  <button id="resume">Weiter</button><button id="quit" class="sec">Zum Menü</button>
+</div></div>
+<div id="win" class="overlay hide"><div class="panel" style="width:min(560px,92vw);text-align:center">
+  <h1>DIE WELT IST <span>GERETTET!</span></h1><div id="winTxt" class="sub" style="font-size:18px;margin-top:16px"></div>
+  <button id="again">Nochmal spielen</button>
+</div></div>
+<script src="lib/peerjs.min.js"></script>
+<script type="module" src="game.js"></script>
+</body>
+</html>
