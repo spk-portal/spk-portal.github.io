@@ -85,3 +85,4 @@ body.touch kbd{display:none}
 .hsE{color:#b8b0c8;font-size:13px;padding:2px 4px}.hsI{color:#7d7590;font-size:11px;margin-top:4px}
 .hsNew{color:#39ff88;font:800 16px "Segoe UI";margin:2px 0 6px;text-align:center}
 #overP .hsBox .hsR:nth-child(1){background:none;color:inherit;font-weight:400}
+@media (max-height:440px){#tBtns{width:214px;gap:8px;right:max(12px,env(safe-area-inset-right));bottom:12px}#tBtns .tb{width:60px;height:60px;font-size:11px}#tBtns .tb.big{width:80px;height:80px;font-size:14px}#tJoy{left:max(18px,env(safe-area-inset-left));bottom:18px;width:124px;height:124px}#tKnob{left:37px;top:37px}}
