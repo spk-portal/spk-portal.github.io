@@ -39,20 +39,9 @@
   "start": "spiel/",
   "genre": "Rave-Abenteuer",
   "spieler": "1–6 · Koop · Online",
-  "beschreibung": "4 Kapitel: SPK-LKW gemeinsam beladen, nachts zur Party fahren (Gegenverkehr, 2 Leben), Boxen ausladen und ums DJ-Pult aufstellen, dann als DJ die illegale Waldrave gegen die Polizei verteidigen. Koop mit Freunden – auch am Handy.",
+  "beschreibung": "4 Kapitel: SPK-LKW gemeinsam beladen, Camper-Rennen zur Party (3 Runden), Boxen ausladen und ums DJ-Pult aufstellen, dann als DJ die illegale Waldrave gegen die Polizei verteidigen. Koop mit Freunden – auch am Handy.",
   "ordner": "SPK - Fuck the Police",
   "pfad": "/SPK%20-%20Fuck%20the%20Police/"
- },
- {
-  "name": "Tour-Bus-Rennen",
-  "portal": 4,
-  "datum": "07.11.2026",
-  "start": "spiel/",
-  "genre": "Rennen",
-  "spieler": "1–6 · Online",
-  "beschreibung": "Mit den Tour-Bussen durch den Wald zur Party – Boxen einsammeln, Polizeisperren ausweichen.",
-  "ordner": "Tour-Bus-Rennen",
-  "pfad": "/Tour-Bus-Rennen/"
  },
  {
   "name": "Traveler",
