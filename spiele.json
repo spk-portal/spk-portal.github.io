@@ -11,47 +11,14 @@
   "pfad": "/DJ-Battle/"
  },
  {
-  "name": "Plakatieren bei Nacht",
-  "portal": 5,
-  "datum": "07.11.2026",
-  "start": "spiel/",
-  "genre": "Schleichen",
-  "spieler": "1–6 · Koop · Online",
-  "beschreibung": "Kleb nachts SPK-Plakate in der Stadt, ohne von Streife und Kameras erwischt zu werden.",
-  "ordner": "Plakatieren bei Nacht",
-  "pfad": "/Plakatieren%20bei%20Nacht/"
- },
- {
-  "name": "Razzia",
-  "portal": 3,
-  "datum": "07.11.2026",
-  "start": "spiel/",
-  "genre": "Verstecken",
-  "spieler": "1–8 · Online",
-  "beschreibung": "Die Polizei sucht die Raver im Wald. Wer gefunden wird, wird selbst zum Polizisten.",
-  "ordner": "Razzia",
-  "pfad": "/Razzia/"
- },
- {
   "name": "SPK – Fuck the Police",
   "portal": 1,
   "datum": "04.11.2026",
   "start": "spiel/",
   "genre": "Rave-Abenteuer",
   "spieler": "1–6 · Koop · Online",
-  "beschreibung": "4 Kapitel: SPK-LKW gemeinsam beladen, Camper-Rennen zur Party (3 Runden), Boxen ausladen und ums DJ-Pult aufstellen, dann als DJ die illegale Waldrave gegen die Polizei verteidigen. Koop mit Freunden – auch am Handy.",
+  "beschreibung": "Die ganze SPK-Story in 7 Missionen: nachts Plakate kleben, den SPK-LKW beladen, Camper-Rennen zur Party, Boxen ausladen und aufstellen, verkabeln, die Waldrave gegen die Polizei verteidigen – und zum Schluss mit dem Wohnmobil auf Tour (Traveler). Koop mit Freunden – auch am Handy.",
   "ordner": "SPK - Fuck the Police",
   "pfad": "/SPK%20-%20Fuck%20the%20Police/"
- },
- {
-  "name": "Traveler",
-  "portal": 6,
-  "datum": "07.11.2026",
-  "start": "spiel/",
-  "genre": "Party-Roadtrip",
-  "spieler": "1–4 · Online",
-  "beschreibung": "Mit dem Wohnmobil von Party zu Party: Zelt aufbauen, Ware an die Leute verkaufen, tanken und größere Zelte kaufen – ohne von der Polizei erwischt zu werden.",
-  "ordner": "Traveler",
-  "pfad": "/Traveler/"
  }
 ]
