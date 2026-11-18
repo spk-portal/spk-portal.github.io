@@ -1,16 +1,5 @@
 [
  {
-  "name": "DJ-Battle",
-  "portal": 2,
-  "datum": "07.11.2026",
-  "start": "spiel/",
-  "genre": "Rhythmus-Battle",
-  "spieler": "1–6 · Online",
-  "beschreibung": "Spiel den Track im Takt an den SPK-Decks – wer die meisten Punkte holt, gewinnt die Crowd.",
-  "ordner": "DJ-Battle",
-  "pfad": "/DJ-Battle/"
- },
- {
   "name": "SPK – Fuck the Police",
   "portal": 1,
   "datum": "04.11.2026",

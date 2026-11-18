@@ -45,6 +45,8 @@
   <div class="panel">
     <h2>PAUSE</h2>
     <button id="bResume" class="btn">▶ Weiterspielen</button>
+    <button id="bSkip" class="btn ghost">⏭ Mission überspringen</button>
+    <div id="pHs" class="hsBox"></div>
     <button id="bRestart" class="btn ghost">↻ Neu starten</button>
     <label id="pChapBox" class="dsel">Kapitel <select id="pChap"><option value="1">1 – LKW beladen</option><option value="2">2 – Camper-Rennen</option><option value="3">3 – Boxen aufbauen</option><option value="4">4 – Boxen verkabeln</option><option value="5">5 – Der Rave</option></select></label>
     <label id="pDiffBox" class="dsel">Schwierigkeit <select id="pDiff"><option value="einfach">Einfach</option><option value="mittel">Mittel</option><option value="schwer">Schwer</option></select></label>
@@ -71,7 +73,8 @@
     <div class="tag">ILLEGALE OPEN-AIR RAVE</div>
     <h1>SPK – FUCK THE POLICE</h1>
     <div class="hsBox"><div class="hsH">🏆 HIGHSCORE TOP 10 · <span id="hsD"></span></div><div id="hsL">Lade …</div><div id="hsInfo" class="hsI"></div></div>
-    <p class="story"><b>Kapitel 1:</b> Ladet gemeinsam die SPK-Boxen in den LKW – drehen, kippen, stapeln, bevor die Zeit abläuft. <b>Kapitel 2:</b> Camper-Rennen zur Party – 3 Runden durch den Wald, SPK-Boxen geben Turbo, ?-Boxen geben Party-Waffen, Polizeisperren bremsen dich aus. <b>Kapitel 3:</b> Tragt alle Boxen aus dem LKW und stellt sie rund ums DJ-Pult auf. <b>Kapitel 4:</b> Verkabelt jede Box mit rotem (+) und schwarzem (−) Kabel am Verstärker – Subwoofer unten, Mitteltöner in der Mitte, Hochtöner oben. Falsch angesteckt = die Box explodiert, nur 2 Fehler erlaubt! <b>Kapitel 5:</b> Die illegale SPK-Open-Air-Rave: Du stehst als DJ hinterm gepanzerten Mischpult und hältst die Polizei mit dem Liebesstrahl von der Crowd fern. Je mehr Spieler, desto schwerer.</p>
+    <p class="story">Die ganze SPK-Story in <b>7 Missionen</b> – der Reihe nach bis zum Sonnenaufgang: <b>1</b> nachts Plakate kleben · <b>2</b> SPK-LKW beladen · <b>3</b> Camper-Rennen zur Party · <b>4</b> Boxen ausladen &amp; aufbauen · <b>5</b> verkabeln (rot +, schwarz −) · <b>6</b> die Rave gegen die Polizei verteidigen · <b>7</b> mit dem Wohnmobil auf Tour. Jede Mission hat ihre eigene Bestenliste.</p>
+    <label>Start bei Mission <select id="misSel"><option value="1">🖌️ 1 – Plakatieren bei Nacht</option><option value="2">📦 2 – SPK-LKW beladen</option><option value="3">🏁 3 – Camper-Rennen</option><option value="4">🔊 4 – Boxen ausladen &amp; aufbauen</option><option value="5">🔌 5 – Boxen verkabeln</option><option value="6">🚨 6 – Rave gegen die Polizei</option><option value="7">🚐 7 – Traveler – auf Tour</option></select></label>
     <label>Dein Name <input id="name" maxlength="16"></label>
     <div id="menuBtns">
       <button id="bStart" class="btn" disabled>🎧 PARTY STARTEN</button>
@@ -93,7 +96,7 @@
   </div>
 </div>
 <script src="lib/peerjs.min.js"></script>
-<script type="module" src="game.js?v=1794957128"></script>
+<script type="module" src="game.js?v=1795012474"></script>
 <div id="rotateMsg"><b>⟲</b>Bitte das Handy quer halten</div>
 </body>
 </html>
