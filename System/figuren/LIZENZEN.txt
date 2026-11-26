@@ -1,0 +1,6 @@
+Lizenzen für heruntergeladene 3D-Modelle
+
+sneaker.glb (Schuhe von Pseudonymos, umgefärbt, Logo entfernt):
+This work is based on "Stylized Sneaker" (https://sketchfab.com/3d-models/stylized-sneaker-3771e5f19b084a6c8253c21acf73179c) by Maitrelova (https://sketchfab.com/Maitrelova) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+
+Waffen (Pistole, AK-47): LowPoly Models by Quaternius, CC0.
